@@ -1,10 +1,10 @@
-const { query } = require('express')
+/* const { query } = require('express')
 const { response } = require('../app')
-const City = require('../models/City')
+ */const City = require('../models/City')
 
 
-const cityController = {
-    create: async (req, res) => {
+ const cityController = {
+     create: async (req, res) => {
         const { city, country, photo, population, foundation, description } = req.body
         try {
             await new City(req.body).save()
@@ -45,9 +45,9 @@ const cityController = {
     },
 
     read: async (req, res) => {
-        const { id } = req.params
+        const {id} = req.params
         try {
-            let city = await City.findOne({ _id : id })
+            let city = await City.findOne({_id:id})
             // si city existe retrono un json con los datos
             // si city no existe -> city = {} retorno un json con 404
             if (city) {
@@ -72,18 +72,53 @@ const cityController = {
     },
 
     update: async (req, res) => {
+        const { id } = req.params
+        const city = req.body
+        let cityModify
         try {
+            cityModify = await City.findOneAndUpdate({ _id: id }, city, { new: true })
+            if (cityModify) {
+                res.status(200).json({
+                    message: "city modified",
+                    response: cityModify,
+                    success: true
+            })
+        } else {
+            
+        }
 
         } catch (error) {
-
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
         }
     },
 
     destroy: async (req, res) => {
+        const { id } = req.params
+        let city
         try {
-
+            city = await City.findOneAndDelete({ _id: id })
+            if (city) {
+                res.status(200).json({
+                    message: 'city removed',
+                    response: city,
+                    success: true
+                })
+            } else {
+                res.status(404).json({
+                    message: 'city not found, couldnt remove',
+                    success: false
+                })
+            }
         } catch (error) {
-
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
         }
     },
 }
