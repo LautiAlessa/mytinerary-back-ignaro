@@ -5,7 +5,7 @@ const City = require('../models/City')
 
 const cityController = {
     create: async (req, res) => {
-        const { city, country, photo, population, fundation } = req.body
+        const { city, country, photo, population, foundation, description } = req.body
         try {
             await new City(req.body).save()
             res.status(201).json({
@@ -22,20 +22,22 @@ const cityController = {
 
     all: async (req, res) => {
         let cities
+        console.log(req.query)
 
         let query = {}
         if (req.query.country) {
-            query.capacity = req.query.country
+            query.country = req.query.country
         }
         if (req.query.city) {
             query.city = req.query.city
         }
-
+        if (req.query._id) {
+            query._id = req.query._id
+        }
 
         try {
-            cities = await City.find()
+            cities = await City.find(query)
             res.json(cities)
-            
         } catch (error) {
             console.log(error)
             res.status(500).json()
@@ -45,7 +47,7 @@ const cityController = {
     read: async (req, res) => {
         const { id } = req.params
         try {
-            let city = await City.findOne({_id:id})
+            let city = await City.findOne({ _id : id })
             // si city existe retrono un json con los datos
             // si city no existe -> city = {} retorno un json con 404
             if (city) {
