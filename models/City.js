@@ -1,17 +1,19 @@
 const mongoose = require('mongoose')
 
-const schema = new mongoose.Schema({
-    city: {type: String, required: true},
-    country: {type: String, required: true},
-    photo: {type: String, required: true},
-    population:  {type: Number, required: true},
-    fundation: {type: Date, required: true},
+const citySchema = new mongoose.Schema({
+    city: { type: String, required: true },
+    country: { type: String, required: true },
+    photo: { type: String, required: true },
+    population: { type: Number, required: true },
+    foundation: { type: Date, required: true },
+    description: { type: String }
 })
 
-const City = mongoose.model(
+let City = mongoose.model(
     'cities',
-    schema
+    citySchema
     //nombre de la coleccion
     //esquema de datos (tabla)
 )
-module.exports = City
+
+module.exports = City;
