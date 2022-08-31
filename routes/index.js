@@ -5,7 +5,7 @@ const usersRouter = require('./users')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'My Tinerary'});
+  res.render('index', { title: 'MyTinerary'});
 });
 
 router.use('/cities', cityRouter)
