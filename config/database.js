@@ -7,5 +7,5 @@ mongoose.connect( //depende de 2 parametros: 1ero link de conexion, 2do objeto c
         useNewUrlParser: true // Utiliza el analizador de errores de mongoose en lugar de mongo
     }
 )
-    .then(() => console.log('connected to databse succesfully'))
+    .then(() => console.log('connected to database succesfully'))
     .catch(error => console.log(error));
