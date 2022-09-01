@@ -22,9 +22,18 @@ const { response } = require('../app')
 
     all: async (req, res) => {
         let cities
-        console.log(req.query)
-
+        
         let query = {}
+        if (req.query.search) {
+            try {
+                const { search } = req.query
+
+                let cities = await City.find({city: {$regex: search}})
+                return res.json({success: true, response: cities})
+            } catch (error) {
+                return res.status(400).json({success: false, error: error.message})
+            }
+        }
         if (req.query.country) {
             query.country = req.query.country
         }
@@ -37,7 +46,7 @@ const { response } = require('../app')
 
         try {
             cities = await City.find(query)
-            res.json(cities)
+            res.json({success: true, response: cities})
         } catch (error) {
             console.log(error)
             res.status(500).json()
