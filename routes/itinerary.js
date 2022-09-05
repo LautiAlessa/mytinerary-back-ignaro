@@ -1,11 +1,10 @@
 var express = require('express');
-const { update, destroy } = require('../controllers/cityController');
 var router = express.Router();
 
-const { create } = require('../controllers/itineraryController'); 
+const { create, update, destroy } = require('../controllers/itineraryController'); 
 
-router.post('/itineraries', create)
-router.patch('/itineraries/:id', update)
-router.delete('/itinerary/:id', destroy)
+router.post('/', create)
+router.patch('/:id', update)
+router.delete('/:id', destroy)
 
 module.exports = router;
