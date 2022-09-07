@@ -5,12 +5,13 @@ const { response } = require('../app')
 
 const cityController = {
     create: async (req, res) => {
-        const { city, country, photo, population, foundation, description } = req.body
+        /* const { city, country, photo, population, foundation, description } = req.body */
         try {
-            await new City(req.body).save()
+            let city = await new City(req.body).save()
             res.status(201).json({
                 message: 'city successfully created',
-                success: true
+                success: true,
+                id: city._id
             })
         } catch (error) {
             res.status(400).json({
