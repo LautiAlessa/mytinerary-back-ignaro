@@ -21,6 +21,27 @@ const itineraryController = {
             })
         }
     },
+
+    all: async (req, res) => {
+        let itineraries
+
+        let query = {}
+        if (req.query.itinerary) {
+            query.itinerary = req.query.itinerary
+        }
+        if (req.query._id) {
+            query._id = req.query._id
+        }
+
+        try {
+            itineraries = await Itinerary.find(query)
+            res.json({ success: true, response: itineraries })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json()
+        }
+    },
+
     update: async (req, res) => {
         const { id } = req.params
         const itinerary = req.body
@@ -45,6 +66,7 @@ const itineraryController = {
             })
         }
     },
+
     destroy: async (req, res) => {
         const { id } = req.params
         let itinerary
