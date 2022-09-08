@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.use('/cities', cityRouter)
 router.use('/itineraries', itineraryRouter)
-router.use('/users', userRouter)
+router.use('/auth', userRouter)
 router.use('/activities', activityRouter)
 router.use('/comments', commentRouter)
 
