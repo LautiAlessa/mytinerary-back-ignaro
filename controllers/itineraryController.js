@@ -2,7 +2,7 @@ const Itinerary = require('../models/Itinerary')
 
 const itineraryController = {
     create: async (req, res) => {
-        const { name, lastName, photo, mail, password, country } = req.body
+        // const { name, lastName, photo, mail, password, country } = req.body
         try {
             let itinerary = await new Itinerary(req.body).save()
             res.status(201).json({
@@ -12,7 +12,10 @@ const itineraryController = {
             if (itinerary) {
 
             } else {
-
+                res.status(406).json({
+                    message: 'cant create, itinerary values are invalid',
+                    success: false
+                })
             }
         } catch (error) {
             res.status(400).json({
@@ -32,9 +35,17 @@ const itineraryController = {
         if (req.query._id) {
             query._id = req.query._id
         }
+        if (req.query.city) {
+            query.city = req.query.city
+        }
+        if (req.query.user) {
+            query.user = req.query.user
+        }
 
         try {
             itineraries = await Itinerary.find(query)
+            .populate("city", {city:1})
+            .populate("user", {name:1, lastName:1})
             res.json({ success: true, response: itineraries })
         } catch (error) {
             console.log(error)
@@ -55,7 +66,10 @@ const itineraryController = {
                     success: true
                 })
             } else {
-
+                res.status(406).json({
+                    message: 'cant update, itinerary values are invalid',
+                    success: false
+                })
             }
 
         } catch (error) {
