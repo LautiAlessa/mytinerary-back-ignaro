@@ -5,7 +5,7 @@ const { response } = require('../app')
 
 const cityController = {
     create: async (req, res) => {
-        /* const { city, country, photo, population, foundation, description } = req.body */
+        // const { city, country, photo, population, foundation, description } = req.body
         try {
             let city = await new City(req.body).save()
             res.status(201).json({
@@ -93,7 +93,10 @@ const cityController = {
                     success: true
                 })
             } else {
-
+                res.status(406).json({
+                    message: 'cant update, city values are invalid',
+                    success: false
+                })
             }
 
         } catch (error) {

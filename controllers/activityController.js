@@ -2,7 +2,7 @@ const Activity = require('../models/Activity')
 
 const activityController = {
     create: async (req, res) => {
-        const { name, lastName, photo, mail, password, country } = req.body
+        // const { name, lastName, photo, mail, password, country } = req.body
         try {
             let activity = await new Activity(req.body).save()
             res.status(201).json({
@@ -12,7 +12,10 @@ const activityController = {
             if (activity) {
 
             } else {
-
+                res.status(406).json({
+                    message: 'cant create, activity values are invalid',
+                    success: false
+                })
             }
         } catch (error) {
             res.status(400).json({
@@ -32,9 +35,13 @@ const activityController = {
         if (req.query._id) {
             query._id = req.query._id
         }
+        if (req.query.itinerary) {
+            query.itinerary = req.query.itinerary
+        }
 
         try {
             activities = await Activity.find(query)
+            .populate("itinerary", {itinerary:1, name:1})
             res.json({ success: true, response: activities })
         } catch (error) {
             console.log(error)
@@ -55,7 +62,10 @@ const activityController = {
                     success: true
                 })
             } else {
-
+                res.status(406).json({
+                    message: 'cant update, activity values are invalid',
+                    success: false
+                })
             }
 
         } catch (error) {
