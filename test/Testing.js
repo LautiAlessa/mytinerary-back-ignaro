@@ -5,7 +5,7 @@ const { assert } = require('chai')
 // ---------------- Cities Testing
 
 /* describe('POST /cities', function () {
-    it('Must respond with 201 status code & ID', function (done) {
+    it('Must respond with 201 status code', function (done) {
         request(app)
             .post('/cities')
             .send({
@@ -35,9 +35,9 @@ const { assert } = require('chai')
         //     return done();
         // })
     })
-})
+}) */
 
-describe('GET /cities', function () {
+/* describe('GET /cities', function () {
     it('should get all cities', function (done) {
         request(app)
             .get('/cities/')
@@ -47,9 +47,9 @@ describe('GET /cities', function () {
                 done()
             })
     })
-});
+}); */
 
-describe('DELETE /cities', function () {
+/* describe('DELETE /cities', function () {
     it('Must respond with 200 status code & ID', function (done) {
         request(app)
             .delete('/cities/6317d5bc4296603c32b6b39c')
@@ -79,12 +79,12 @@ describe('DELETE /cities', function () {
             .post('/itineraries')
             .send({
                 name: "Test",
-                user: "Test",
-                city: "Test",
-                price: "111",
+                user: "63196500e35473b77803b41c",
+                city: "6317ca2d3794efcc538d8f52",
+                price: "115",
                 // likes: "",
                 // tags: "",
-                duration: "222"
+                duration: "5"
             })
             .expect(201, done)
             .end(function (err, res) {
@@ -103,35 +103,35 @@ describe('DELETE /cities', function () {
                 return done();
             })
     })
-})
+}) */
 
-describe('PATCH /itineraries', function () {
+/* describe('PATCH /itineraries', function () {
     it('Must respond with 200 status code', function (done) {
         request(app)
-            .patch('/itineraries/6317caba9ba720ab75fdaeb9')
+            .patch('/itineraries/63198cc4251d5c92b7834b14')
             .send({
                 name: "Test",
-                user: "Test",
-                city: "Test",
-                price: "999",
+                user: "63196500e35473b77803b41c",
+                city: "6317ca2d3794efcc538d8f52",
+                price: "150",
                 // likes: "",
                 // tags: "",
-                duration: "999"
+                duration: "5"
             })
             .expect(200, done)
     })
-})
+}) */
 
-describe('DELETE /itineraries', function () {
-    it('Must respond with 200 status code & ID', function (done) {
+/* describe('DELETE /itineraries', function () {
+    it('Must respond with 200 status code', function (done) {
         request(app)
-            .delete('/itineraries/6317caba9ba720ab75fdaeb9')
+            .delete('/itineraries/63198cc4251d5c92b7834b14')
             .expect(200, done)
     })
 
     it('Must respond with 404 status code', function (done) {
         request(app)
-            .delete('/itineraries/6317caba9ba720ab75fdaeb9')
+            .delete('/itineraries/63198cc4251d5c92b7834b14')
             .expect(404, done)
         // .end(function (err, res) {
         //     if (err) return done(err);
