@@ -26,7 +26,7 @@ const commentController = {
     },
 
     all: async (req, res) => {
-        let activities
+        let comments
 
         let query = {}
         if (req.query.comment) {
@@ -40,9 +40,10 @@ const commentController = {
         }
 
         try {
-            activities = await Comment.find(query)
+            comments = await Comment.find(query)
             .populate("itinerary", {name:1})
-            res.json({ success: true, response: activities })
+            .populate("user", {name:1, lastName:1})
+            res.json({ success: true, response: comments })
         } catch (error) {
             console.log(error)
             res.status(500).json()
