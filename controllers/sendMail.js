@@ -3,7 +3,7 @@ const {google} = require('googleapis')
 const { response } = require('express')
 const { model } = require('mongoose')
 const OAuth2 = google.auth.OAuth2
-const {GOOGLE_ID, GOOGLE_REFRESH, GOOGLE_SECRET, GOOGLE_URL, GOOGLE_USER} = proccess.env
+const {GOOGLE_ID, GOOGLE_REFRESH, GOOGLE_SECRET, GOOGLE_URL, GOOGLE_USER} = process.env
 
 const sendMail = async (mail, code) => {
 
@@ -60,4 +60,4 @@ const sendMail = async (mail, code) => {
 
 }
 
-model.export = sendMail
+module.exports = sendMail
