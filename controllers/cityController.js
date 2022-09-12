@@ -3,14 +3,15 @@ const { response } = require('../app')
  */const City = require('../models/City')
 
 
- const cityController = {
-     create: async (req, res) => {
-        const { city, country, photo, population, foundation, description } = req.body
+const cityController = {
+    create: async (req, res) => {
+        // const { city, country, photo, population, foundation, description } = req.body
         try {
-            await new City(req.body).save()
+            let city = await new City(req.body).save()
             res.status(201).json({
                 message: 'city successfully created',
-                success: true
+                success: true,
+                id: city._id
             })
         } catch (error) {
             res.status(400).json({
@@ -22,16 +23,15 @@ const { response } = require('../app')
 
     all: async (req, res) => {
         let cities
-        
+
         let query = {}
         if (req.query.search) {
             try {
                 const { search } = req.query
-
-                let cities = await City.find({city: {$regex: search}})
-                return res.json({success: true, response: cities})
+                let cities = await City.find({ city: { $regex: search } })
+                return res.json({ success: true, response: cities })
             } catch (error) {
-                return res.status(400).json({success: false, error: error.message})
+                return res.status(400).json({ success: false, error: error.message })
             }
         }
         if (req.query.country) {
@@ -46,7 +46,7 @@ const { response } = require('../app')
 
         try {
             cities = await City.find(query)
-            res.json({success: true, response: cities})
+            res.json({ success: true, response: cities })
         } catch (error) {
             console.log(error)
             res.status(500).json()
@@ -54,9 +54,9 @@ const { response } = require('../app')
     },
 
     read: async (req, res) => {
-        const {id} = req.params
+        const { id } = req.params
         try {
-            let city = await City.findOne({_id:id})
+            let city = await City.findOne({ _id: id })
             // si city existe retrono un json con los datos
             // si city no existe -> city = {} retorno un json con 404
             if (city) {
@@ -91,10 +91,13 @@ const { response } = require('../app')
                     message: "city modified",
                     response: cityModify,
                     success: true
-            })
-        } else {
-            
-        }
+                })
+            } else {
+                res.status(406).json({
+                    message: 'cant update, city values are invalid',
+                    success: false
+                })
+            }
 
         } catch (error) {
             console.log(error);
