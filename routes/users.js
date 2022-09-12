@@ -4,13 +4,13 @@ const {signUp,verifyMail,signIn} = require('../controllers/userController')
 
 const { create, all, update, destroy} = require('../controllers/userController'); 
 
-router.post('/', create)
-router.get('/', all)
+// router.post('/', create)
+// router.get('/', all)
 router.post('/signup', signUp)
 router.get('/verify/:code', verifyMail)
 router.post('/signin', signIn)
-router.patch('/:id', update)
-router.delete('/:id', destroy)
+// router.patch('/:id', update)
+// router.delete('/:id', destroy)
 
 module.exports = router;
 
