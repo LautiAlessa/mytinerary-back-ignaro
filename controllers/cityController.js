@@ -1,12 +1,24 @@
 /* const { query } = require('express')
-const { response } = require('../app')
- */const City = require('../models/City')
+const { response } = require('../app')*/
+const City = require('../models/City')
+const Joi = require('joi')
 
+const validator = Joi.object({
+    "city": Joi.string(),
+    "country": Joi.string,
+    "photo": Joi.string().uri().message('INVALID URL'),
+    "population": Joi.number().min(1000).max(100000000),
+    "foundation": Joi.date().greater(new Date),
+    "description": Joi.string,
+})
 
 const cityController = {
     create: async (req, res) => {
         // const { city, country, photo, population, foundation, description } = req.body
         try {
+            //validar
+            let result = await validator.validate(req.body)
+
             let city = await new City(req.body).save()
             res.status(201).json({
                 message: 'city successfully created',
@@ -14,8 +26,10 @@ const cityController = {
                 id: city._id
             })
         } catch (error) {
+            console.log(error);
+
             res.status(400).json({
-                message: "couldn't create city",
+                message: error.message,
                 success: false
             })
         }
