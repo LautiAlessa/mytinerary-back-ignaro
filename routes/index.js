@@ -4,7 +4,7 @@ const cityRouter = require('./cities')
 const itineraryRouter = require('./itineraries')
 const activityRouter = require('./activities')
 const commentRouter = require ('./comments')
-const usersRouter = require('./users')
+const userRouter = require('./users')
 
 
 /* GET home page. */
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 router.use('/cities', cityRouter)
 router.use('/itineraries', itineraryRouter)
-router.use('/users', usersRouter)
+router.use('/auth', userRouter)
 router.use('/activities', activityRouter)
 router.use('/comments', commentRouter)
 
