@@ -35,6 +35,8 @@ const userController = {
     signUp: async (req, res) => {
         let {
             name,
+            lastName,
+            country,
             photo,
             email,
             password,
@@ -52,7 +54,7 @@ const userController = {
                 //code: clave unica de usuario o unique string
                 if (from === 'form') {//si la data viene del formulario de registro
                     password = bcryptjs.hashSync(password, 10) //utilizamos el metodo hashSync que requiere 2 parámetros
-                    user = await new User({ name, photo, email, password: [password], role, from: [from], logged, verified, code }).save() //modifico pass con el array
+                    user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save() //modifico pass con el array
                     //aca hay que incorporar la funcion para el envío del mail de verificación
                     sendMail(email, code)
                     res.status(200).json({
@@ -62,7 +64,7 @@ const userController = {
                 } else {//si viene de redes sociales
                     password = bcryptjs.hashSync(password, 10) //utilizamos el metodo hashSync que requiere 2 parámetros
                     verified = true //lo paso a true porque se supone que ya esta verificado cuando se logue en la red social
-                    user = await new User({ name, photo, email, password: [password], role, from: [from], logged, verified, code }).save()
+                    user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save()
                     //no hace falta enviar el mail de verificación
                     res.status(200).json({
                         message: "user signed up from" + from,
@@ -120,7 +122,7 @@ const userController = {
         } catch (error) {
             console.log(error);
             res.status(400).json({
-                message: "couldn't verified account",
+                message: "couldn't verify account",
                 success: false
             })
         }
@@ -133,19 +135,21 @@ const userController = {
             if (!user) { //si usuario NO existe 
                 res.status(404).json ({
                     success: false,
-                    message: "User doesn't exist, plese signup"
+                    message: "User doesn't exist, please signup"
                 })
             } else if(user.verified) {// si usuario SI existe y esta verificado
 
                 const checkPass = user.password.filter(passwordElement => bcryptjs.compareSync(password, passwordElement))
 
-                if(from === 'form'){ // sie el usuario intenta ingresar por form
+                if(from === 'form'){ // si el usuario intenta ingresar por form
 
                     if(checkPass.length > 0){ //si contraseña coincide 
 
                         const loginUser = {
                             id: user._id,
                             name: user.name,
+                            lastName: user.lastName,
+                            country: user.country,
                             email: user.email,
                             role: user.role,
                             from: user.from,
@@ -172,6 +176,8 @@ const userController = {
                         const loginUser = {
                             id: user._id,
                             name: user.name,
+                            lastName: user.lastName,
+                            country: user.country,
                             email: user.email,
                             role: user.role,
                             from: user.from,
