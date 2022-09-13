@@ -29,14 +29,11 @@ const activityController = {
         let activities
 
         let query = {}
-        if (req.query.activity) {
-            query.activity = req.query.activity
+        if (req.query.name) {
+            query.name = req.query.name
         }
         if (req.query._id) {
             query._id = req.query._id
-        }
-        if (req.query.itinerary) {
-            query.itinerary = req.query.itinerary
         }
 
         try {
@@ -54,7 +51,7 @@ const activityController = {
         const activity = req.body
         let activityModify
         try {
-            activityModify = await activity.findOneAndUpdate({ _id: id }, activity, { new: true })
+            activityModify = await Activity.findOneAndUpdate({ _id: id }, activity, { new: true })
             if (activityModify) {
                 res.status(200).json({
                     message: "activity modified",
@@ -81,7 +78,7 @@ const activityController = {
         const { id } = req.params
         let activity
         try {
-            activity = await activity.findOneAndDelete({ _id: id })
+            activity = await Activity.findOneAndDelete({ _id: id })
             if (activity) {
                 res.status(200).json({
                     message: 'activity removed',

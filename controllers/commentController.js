@@ -29,14 +29,11 @@ const commentController = {
         let comments
 
         let query = {}
-        if (req.query.comment) {
-            query.comment = req.query.comment
-        }
         if (req.query._id) {
             query._id = req.query._id
         }
-        if (req.query.itinerary) {
-            query.itinerary = req.query.itinerary
+        if (req.query.user) {
+            query.user = req.query.user // con userID
         }
 
         try {

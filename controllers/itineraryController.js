@@ -44,7 +44,7 @@ const itineraryController = {
 
         try {
             itineraries = await Itinerary.find(query)
-            .populate("city", {city:1})
+            .populate("city", {city:1, country:1})
             .populate("user", {name:1, lastName:1, photo:1})
             res.json({ success: true, response: itineraries })
         } catch (error) {
