@@ -27,7 +27,6 @@ const itineraryController = {
 
     all: async (req, res) => {
         let itineraries
-
         let query = {}
         if (req.query.itinerary) {
             query.itinerary = req.query.itinerary
@@ -41,11 +40,11 @@ const itineraryController = {
         if (req.query.user) {
             query.user = req.query.user
         }
-
         try {
             itineraries = await Itinerary.find(query)
             .populate("city", {city:1, country:1})
             .populate("user", {name:1, lastName:1, photo:1})
+            .populate("activities")
             res.json({ success: true, response: itineraries })
         } catch (error) {
             console.log(error)
