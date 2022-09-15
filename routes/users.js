@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const {signUp, verifyMail, signIn} = require('../controllers/userController')
+const {signUp, verifyMail, signIn, all, read} = require('../controllers/userController')
 
 /* const { create, all, update, destroy} = require('../controllers/userController');  */
 
 // router.post('/', create)
-// router.get('/', all)
+router.get('/', all)
+router.get('/', read)
 router.post('/signup', signUp)
 router.get('/verify/:code', verifyMail)
 router.post('/signin', signIn)
