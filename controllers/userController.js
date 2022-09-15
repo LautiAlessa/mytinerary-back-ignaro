@@ -57,7 +57,7 @@ const userController = {
                     user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save() //modifico pass con el array
                     //aca hay que incorporar la funcion para el envío del mail de verificación
                     sendMail(email, code)
-                    res.status(200).json({
+                    res.status(201).json({
                         message: "user signed up",
                         success: true
                     })
@@ -66,7 +66,7 @@ const userController = {
                     verified = true //lo paso a true porque se supone que ya esta verificado cuando se logue en la red social
                     user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save()
                     //no hace falta enviar el mail de verificación
-                    res.status(200).json({
+                    res.status(201).json({
                         message: "user signed up from" + from,
                         success: true
                     })
@@ -74,8 +74,8 @@ const userController = {
             } else {//si el usuario SI existe
                 if (user.from.includes(from)) { //si la prpiedad from del usuario (que es un array) incluye el valor from 
                     //user.from = ['google','facebook'] incluye from='google'
-                    res.status(200).json({ // 200 a confirmar/estudiar => tiene exito buscando un usario
-                        message: "user already exist",
+                    res.status(409).json({ // 200 a confirmar/estudiar => tiene exito buscando un usario
+                        message: "user already exists",
                         success: false //porque no tiene exito en la creación del usuario
                     })
                 } else { //user.from = ['google','facebook'] incluye from='linkedin'
@@ -85,7 +85,7 @@ const userController = {
                     //si ya se verifico en algun momento me aseguro que ya este verificado definiendo user.verified=true
                     user.password.push[bcryptjs.hashSync(password, 10)] //hasheo la nueva contraseña del usuario y la pusheo al array de contraseñas
                     await user.save()
-                    res.status(200).json({
+                    res.status(201).json({
                         message: "user signed up from" + from,
                         success: true
                     })
@@ -129,21 +129,21 @@ const userController = {
     },
 
     signIn: async (req, res) => {
-        const {email, password, from} = req.body
+        const { email, password, from } = req.body
         try {
-            const user = await User.findOne({email})
+            const user = await User.findOne({ email })
             if (!user) { //si usuario NO existe 
-                res.status(404).json ({
+                res.status(404).json({
                     success: false,
                     message: "User doesn't exist, please signup"
                 })
-            } else if(user.verified) {// si usuario SI existe y esta verificado
+            } else if (user.verified) {// si usuario SI existe y esta verificado
 
                 const checkPass = user.password.filter(passwordElement => bcryptjs.compareSync(password, passwordElement))
 
-                if(from === 'form'){ // si el usuario intenta ingresar por form
+                if (from === 'form') { // si el usuario intenta ingresar por form
 
-                    if(checkPass.length > 0){ //si contraseña coincide 
+                    if (checkPass.length > 0) { //si contraseña coincide 
 
                         const loginUser = {
                             id: user._id,
@@ -160,18 +160,18 @@ const userController = {
                         await user.save()
                         res.status(200).json({
                             success: true,
-                            response: {user: loginUser},
+                            response: { user: loginUser },
                             message: 'Welcome' + user.name
                         })
-                    }else{ // si contraseña no coincide
-                        res.status(400).json({
+                    } else { // si contraseña no coincide
+                        res.status(401).json({
                             success: false,
                             message: 'Username or password incorrect'
                         })
                     }
 
                 } else { //si el usuario intenta ingresar por redes sociales
-                    if(checkPass.length > 0){ //si contraseña coincide 
+                    if (checkPass.length > 0) { //si contraseña coincide 
 
                         const loginUser = {
                             id: user._id,
@@ -187,20 +187,20 @@ const userController = {
                         await user.save()
                         res.status(200).json({
                             success: true,
-                            response: {user: loginUser},
-                            message: 'Welcome' + user.name
+                            response: { user: loginUser },
+                            message: 'Welcome ' + user.name
                         })
-                    }else{ // si contraseña no coincide
-                        res.status(400).json({
+                    } else { // si contraseña no coincide
+                        res.status(401).json({
                             success: false,
                             message: 'Invalid credentials'
                         })
                     }
                 }
             } else {// Si usuario existe pero no esta verificado
-                res.status(401).json({
+                res.status(403).json({
                     success: false,
-                    message: 'please, verified your email account and try again'
+                    message: 'please, verify your email account and try again'
                 })
             }
         } catch (error) {
@@ -211,53 +211,54 @@ const userController = {
             })
         }
     },
-    signOut: async () => { }, //findOneAndUpdate y cambiar logged de true a false
-}    
-    module.exports = userController
+    signOut: async () => {
+        
+    }, //findOneAndUpdate y cambiar logged de true a false
 
-//     create: async (req, res) => {
-//         // const { name, lastName, photo, mail, password, country } = req.body
-//         try {
-//             await new User(req.body).save()
-//             res.status(201).json({
-//                 message: 'user successfully created',
-//                 success: true
-//             })
-//             if (user) {
+    all: async (req, res) => {
+        let users
 
-//             } else {
-//                 res.status(406).json({
-//                     message: 'cant create, user values are invalid',
-//                     success: false
-//                 })
-//             }
-//         } catch (error) {
-//             res.status(400).json({
-//                 message: "couldn't create user",
-//                 success: false
-//             })
-//         }
-//     },
+        let query = {}
+        if (req.query._id) {
+            query._id = req.query._id
+        }
 
-//     all: async (req, res) => {
-//         let users
+        try {
+            users = await User.find(query)
+            res.json({ success: true, response: users })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json()
+        }
+    },
 
-//         let query = {}
-//         if (req.query.user) {
-//             query.user = req.query.user
-//         }
-//         if (req.query._id) {
-//             query._id = req.query._id
-//         }
+    read: async (req, res) => {
+        const { id } = req.params
+        try {
+            let user = await User.findOne({ _id: id })
+            if (user) {
+                res.status(200).json({
+                    message: "you got one user",
+                    response: user,
+                    success: true
+                })
+            } else {
+                res.status(404).json({
+                    message: "couldn't find that user",
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
 
-//         try {
-//             users = await User.find(query)
-//             res.json({ success: true, response: users })
-//         } catch (error) {
-//             console.log(error)
-//             res.status(500).json()
-//         }
-//     },
+}
+module.exports = userController
 
 //     update: async (req, res) => {
 //         const { id } = req.params
@@ -313,7 +314,3 @@ const userController = {
 //         }
 //     },
 // }
-
-
-
-
