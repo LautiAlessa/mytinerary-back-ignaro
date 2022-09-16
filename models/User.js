@@ -19,11 +19,16 @@ const userSchema = new mongoose.Schema({
         }
     },
     email: { 
-        type: String, 
+        type: String,
+        min: [4, "Mail address needs to be at least 4 characters"],
+        max: [319,"Mail address can´t be over 319 characters"],
+        lowercase: true,
         required: true
     },
     password: [{ 
-        type: String, 
+        type: String,
+        min: [4, "Password needs to be at least 4 characters"],
+        max: [128,"Password can´t be over 128 characters"],
         required: true 
     }], //tieme que ser un array para alojar todas las contraseñas
     role : { 
