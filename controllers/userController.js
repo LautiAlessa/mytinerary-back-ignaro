@@ -25,8 +25,8 @@
 
 
 const User = require('../models/User')
-const crypto = require('crypto') // recurso propio de nodeJS para generar códigos aleatorios
-const bcryptjs = require('bcryptjs') // ecurso propio de nodeJS para hashear contraseñasS
+const crypto = require('crypto')
+const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
 const { find, findOne } = require('../models/User')
 
@@ -40,8 +40,8 @@ const userController = {
             photo,
             email,
             password,
-            role, //tiene que venir del frontend para usar este metodo para ambos casos (user y admin)
-            from, //tiene que venir del frontend para avisarle al metodo desde donde se crea el usuario
+            role, 
+            from, 
         } = req.body
         try {
             let user = await User.findOne({ email })
@@ -50,9 +50,9 @@ const userController = {
                 let verified = false
                 let code = crypto //invoco el generador de códigos
                     .randomBytes(15) //le aplico el método para avisarle que tiene que tener 15 dígitos
-                    .toString('hex') //le aplico el método para avisarle que tiene que tiene que ser hexagecimal
+                    .toString('hex') //le aplico el método para avisarle que tiene que tiene que ser hexadecimal
                 //code: clave unica de usuario o unique string
-                if (from === 'form') {//si la data viene del formulario de registro
+                if (from === 'form') {
                     password = bcryptjs.hashSync(password, 10) //utilizamos el metodo hashSync que requiere 2 parámetros
                     user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save() //modifico pass con el array
                     //aca hay que incorporar la funcion para el envío del mail de verificación
@@ -62,7 +62,7 @@ const userController = {
                         success: true
                     })
                 } else {//si viene de redes sociales
-                    password = bcryptjs.hashSync(password, 10) //utilizamos el metodo hashSync que requiere 2 parámetros
+                    password = bcryptjs.hashSync(password, 10)
                     verified = true //lo paso a true porque se supone que ya esta verificado cuando se logue en la red social
                     user = await new User({ name, lastName, country, photo, email, password: [password], role, from: [from], logged, verified, code }).save()
                     //no hace falta enviar el mail de verificación
@@ -100,19 +100,14 @@ const userController = {
         }
     },
 
-    //el código unico y aleatorio generado en el controlador de signup
-    //se pasa por params a este otro metodo para poder verificar la cuenta
-    //luego de requerirlo lo comparo con los perfiles ya creados. (lo busco en la base de datos)
-    //si encuentra el usuario cambio el verified de false a true.
-    //si no lo encuentra avisar que el mail a verificar no tiene cuenta.
     verifyMail: async (req, res) => {
         const { code } = req.params
         try {
             let user = await User.findOne({ code: code })
             if (user) {
-                user.verified = true //cambio la propiedad
-                await user.save() //guardo el cambio en la base de datos
-                res.redirect(301, 'http://www.google.com')
+                user.verified = true
+                await user.save()
+                res.redirect(301, 'http://localhost:3000/')
             } else {
                 res.status(404).json({
                     message: "email has not account yet",
@@ -132,15 +127,15 @@ const userController = {
         const { email, password, from } = req.body
         try {
             const user = await User.findOne({ email })
-            if (!user) { //si usuario NO existe 
+            if (!user) {
                 res.status(404).json({
                     success: false,
                     message: "User doesn't exist, please signup"
                 })
             } else if (user.verified) {// si usuario SI existe y esta verificado
                 const checkPass = user.password.filter(passwordElement => bcryptjs.compareSync(password, passwordElement))
-                if (from === 'form') { // si el usuario intenta ingresar por form
-                    if (checkPass.length > 0) { //si contraseña coincide 
+                if (from === 'form') {
+                    if (checkPass.length > 0) {
                         const loginUser = {
                             id: user._id,
                             name: user.name,
@@ -158,14 +153,14 @@ const userController = {
                             response: { user: loginUser },
                             message: 'Welcome' + user.name
                         })
-                    } else { // si contraseña no coincide
+                    } else {
                         res.status(401).json({
                             success: false,
                             message: 'Username or password incorrect'
                         })
                     }
-                } else { //si el usuario intenta ingresar por redes sociales
-                    if (checkPass.length > 0) { //si contraseña coincide 
+                } else {
+                    if (checkPass.length > 0) {
                         const loginUser = {
                             id: user._id,
                             name: user.name,
@@ -183,14 +178,14 @@ const userController = {
                             response: { user: loginUser },
                             message: 'Welcome ' + user.name
                         })
-                    } else { // si contraseña no coincide
+                    } else {
                         res.status(401).json({
                             success: false,
                             message: 'Invalid credentials'
                         })
                     }
                 }
-            } else {// Si usuario existe pero no esta verificado
+            } else {
                 res.status(403).json({
                     success: false,
                     message: 'please, verify your email account and try again'
