@@ -1,10 +1,18 @@
 const Comment = require('../models/Comment')
+const User = require('../models/User')
+const Itinerary = require('../models/Itinerary')
 
 const commentController = {
     create: async (req, res) => {
-        // const { name, lastName, photo, mail, password, country } = req.body
+        const {id, comment, itineraryId} = req.body
         try {
-            let comment = await new Comment(req.body).save()
+            let user = await User.findById(id)
+            let itinerary = await Itinerary.findById(itineraryId)
+            // console.log(user)
+            let newComment = await new Comment({comment, avatar: user.photo, name: user.name, lastName: user.lastName}).save()
+            itinerary.comments = itinerary.comments.concat(newComment)
+            await itinerary.save()
+            // console.log(newComment)
             res.status(201).json({
                 message: 'comment successfully created',
                 success: true
@@ -18,6 +26,7 @@ const commentController = {
                 })
             }
         } catch (error) {
+            console.log(error)
             res.status(400).json({
                 message: "couldn't create comment",
                 success: false
