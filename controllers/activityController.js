@@ -35,10 +35,13 @@ const activityController = {
         if (req.query._id) {
             query._id = req.query._id
         }
+        if (req.query.itinerary) {
+            query.itinerary = req.query.itinerary
+        }
 
         try {
             activities = await Activity.find(query)
-            .populate("itinerary", {itinerary:1, name:1})
+            .populate("itinerary", {name:1})
             res.json({ success: true, response: activities })
         } catch (error) {
             console.log(error)
