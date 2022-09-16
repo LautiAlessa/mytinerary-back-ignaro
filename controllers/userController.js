@@ -138,13 +138,9 @@ const userController = {
                     message: "User doesn't exist, please signup"
                 })
             } else if (user.verified) {// si usuario SI existe y esta verificado
-
                 const checkPass = user.password.filter(passwordElement => bcryptjs.compareSync(password, passwordElement))
-
                 if (from === 'form') { // si el usuario intenta ingresar por form
-
                     if (checkPass.length > 0) { //si contraseña coincide 
-
                         const loginUser = {
                             id: user._id,
                             name: user.name,
@@ -155,7 +151,6 @@ const userController = {
                             from: user.from,
                             photo: user.photo
                         }
-
                         user.logged = true
                         await user.save()
                         res.status(200).json({
@@ -169,10 +164,8 @@ const userController = {
                             message: 'Username or password incorrect'
                         })
                     }
-
                 } else { //si el usuario intenta ingresar por redes sociales
                     if (checkPass.length > 0) { //si contraseña coincide 
-
                         const loginUser = {
                             id: user._id,
                             name: user.name,
@@ -211,13 +204,35 @@ const userController = {
             })
         }
     },
-    signOut: async () => {
-        
+    signOut: async (req, res) => {
+        const {email} = req.body
+        try {
+            let user = await User.findOne({email:email})
+                if (user){
+                    user.logged = false
+                    await user.save()
+                    res.status(200).json({
+                        success: true,
+                        response: user.logged,
+                        message: 'Signed Out!'
+                    })
+                } else {
+                    res.status(404).json({
+                        success: false,
+                        message: 'User not found'
+                    })
+                }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                success: false,
+                message: 'Failed sign out'
+            })
+        }
     }, //findOneAndUpdate y cambiar logged de true a false
 
     all: async (req, res) => {
         let users
-
         let query = {}
         if (req.query._id) {
             query._id = req.query._id
