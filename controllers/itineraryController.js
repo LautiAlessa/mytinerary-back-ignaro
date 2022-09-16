@@ -27,10 +27,8 @@ const itineraryController = {
 
     all: async (req, res) => {
         let itineraries
+        
         let query = {}
-        if (req.query.itinerary) {
-            query.itinerary = req.query.itinerary
-        }
         if (req.query._id) {
             query._id = req.query._id
         }
