@@ -4,42 +4,54 @@ const { assert } = require('chai')
 
 // ---------------- User SignIn Testing
 
-/* describe('POST /auth/signin', function () {
+describe('POST /auth/signin', function () {
 
-    // it('Must respond with user logged in', function (done) {
-    //     request(app)
-    //         .post('/auth/signin/')
-    //         .send({
-    //             email: "ignaciogiusti94@gmail.com",
-    //             password: "password",
-    //             from: "form",
-    //         })
-    //         .expect(200, done)
-    //         .then(response => {
-    //             assert(response.body)
-    //             console.log(response.body.user)
-    //             done()
-    //         })
-    // })
+    /* it('Must respond with 401 status code, invalid credentials', function (done) {
+        request(app)
+            .post('/auth/signin')
+            .send({
+                email: "ignaciogiusti94@gmail.com",
+                password: "password321",
+                from: "form",
+            })
+            .expect(401, done)
+            .then(response => {
+                assert(response.body)
+                done()
+            })
+    }) */
 
-    
-    // it('Must respond with 401 status code, ', function () {
-    //     request(app)
-    //         .post('/auth/signin')
-    //         .send({
-    //             email: "ignaciogiusti94@gmail.com",
-    //             password: "password312",
-    //             from: "form",
-    //         })
-    //         .expect(401)
-    //         .then(response => {
-    //             assert(response.body)
-    //             console.log(response.body.user)
-    //             done()
-    //         })
-    // })
-    
-}); */
+    /* it('Must respond with user logged in', function (done) {
+        request(app)
+            .post('/auth/signin/')
+            .send({
+                email: "ignaciogiusti94@gmail.com",
+                password: "password",
+                from: "form",
+            })
+            .expect(200, done)
+            .then(response => {
+                assert(response.body)
+                done()
+            })
+    }) */
+
+    /* it('Must respond with 403 status code, user is not verified', function (done) {
+        request(app)
+            .post('/auth/signin/')
+            .send({
+                email: "test2@gmail.com",
+                password: "PasswordTest",
+                from: "form",
+            })
+            .expect(403, done)
+            .then(response => {
+                assert(response.body)
+                done()
+            })
+    }) */
+
+});
 
 // ---------------- User SignUp Testing
 
