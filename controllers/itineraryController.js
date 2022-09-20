@@ -29,9 +29,6 @@ const itineraryController = {
         let itineraries
 
         let query = {}
-        if (req.query.itinerary) {
-            query.itinerary = req.query.itinerary
-        }
         if (req.query._id) {
             query._id = req.query._id
         }
@@ -41,11 +38,12 @@ const itineraryController = {
         if (req.query.user) {
             query.user = req.query.user
         }
-
         try {
             itineraries = await Itinerary.find(query)
-            .populate("city", {city:1})
+            .populate("city", {city:1, country:1})
             .populate("user", {name:1, lastName:1, photo:1})
+            .populate("activities")
+            .populate("comments")
             res.json({ success: true, response: itineraries })
         } catch (error) {
             console.log(error)

@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 
 const commentSchema = new mongoose.Schema({
     comment: { type: String, required: true },
+    avatar: { type: String, required: true },
+    name: { type: String, required: true },
+    lastName: { type: String, required: true },
     user: { type: mongoose.Types.ObjectId, ref: 'users' },
     itinerary: { type: mongoose.Types.ObjectId, ref: 'itineraries' }
 })
