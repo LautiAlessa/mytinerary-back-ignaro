@@ -5,7 +5,7 @@ var router = express.Router();
 const { create, likesDislikes, all, update, destroy } = require('../controllers/itineraryController'); 
 
 router.post('/', create)
-router.patch('/', passport.authenticate('jwt', {session: false}), likesDislikes)
+router.patch('/likes/', passport.authenticate('jwt', {session: false}), likesDislikes)
 router.get('/', all)
 router.patch('/:id', update)
 router.delete('/:id', destroy)
