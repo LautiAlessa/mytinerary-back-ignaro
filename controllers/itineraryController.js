@@ -25,6 +25,35 @@ const itineraryController = {
         }
     },
 
+    likesDislikes: async(req, res) => {
+        let { userId } = req.user
+        let { itineraryId } = req.body
+        try{
+            // let itinerary = await Itinerary.findOne({_id:itineraryId})
+            let itinerary = await Itinerary.findOne({_id:userId})
+            if (itinerary && itinerary.likes.includes(id)) {
+                // itinerary.likes.pull(id)
+                // await itinerary.save()
+                await Itinerary.findOneAndUpdate({_id:id}, {$pull:{likes:userId}}, {new: true})
+                res.status(200).json({
+    
+                })
+            } else if (!itinerary.likes.includes(id)) {
+                // itinerary.likes.push(id)
+                // await itinerary.save()
+                await Itinerary.findOneAndUpdate({_id:id}, {$pull:{likes:userId}}, {new: true})
+            } else {
+    
+            }
+        } catch {
+            console.log(error)
+            res.json({
+                message:'error',
+                success: false
+            })
+        }
+    },
+
     all: async (req, res) => {
         let itineraries
 
