@@ -26,7 +26,8 @@ const itineraryController = {
     },
 
     likesDislikes: async(req, res) => {
-        let { userId } = req.user
+        let {id} = req.params
+        let userId = req.user.id
         let { itineraryId } = req.body
         try{
             // let itinerary = await Itinerary.findOne({_id:itineraryId})
@@ -36,14 +37,18 @@ const itineraryController = {
                 // await itinerary.save()
                 await Itinerary.findOneAndUpdate({_id:id}, {$pull:{likes:userId}}, {new: true})
                 res.status(200).json({
-    
+                    message: "itinerary liked",
+                    success: true
                 })
-            } else if (!itinerary.likes.includes(id)) {
+            } // else if (!itinerary.likes.includes(id)) {}
+             else {
                 // itinerary.likes.push(id)
                 // await itinerary.save()
-                await Itinerary.findOneAndUpdate({_id:id}, {$pull:{likes:userId}}, {new: true})
-            } else {
-    
+                await Itinerary.findOneAndUpdate({_id:id}, {$push:{likes:userId}}, {new: true})
+                rest.status(200).json({
+                    message: "itinerary disliked",
+                    success: true
+                })
             }
         } catch {
             console.log(error)
