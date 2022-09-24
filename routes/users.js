@@ -3,9 +3,7 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 
-const {signUp, verifyMail, signIn, all, read, update, /* signInToken, */ signOut} = require('../controllers/userController')
-
-const { create, all, update, destroy} = require('../controllers/userController');  
+const {signUp, verifyMail, signIn, all, read, update, /* signInToken, */ signOut} = require('../controllers/userController') 
 
 // router.post('/', create)
 router.get('/', all)
