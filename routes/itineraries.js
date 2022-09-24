@@ -1,6 +1,7 @@
 var express = require('express');
 const passport = require('passport');
 var router = express.Router();
+require('../config/passport')
 
 const { create, likesDislikes, all, update, destroy } = require('../controllers/itineraryController'); 
 
