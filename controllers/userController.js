@@ -321,6 +321,7 @@ const userController = {
 }
 module.exports = userController
 
+
 //     destroy: async (req, res) => {
 //         const { id } = req.params
 //         let user
