@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 const passport = require('passport');
 
-const {signUp, verifyMail, signIn, all, read, /* signInToken, */ signOut} = require('../controllers/userController')
+const {signUp, verifyMail, signIn, all, read, update, /* signInToken, */ signOut} = require('../controllers/userController')
 
 /* const { create, all, update, destroy} = require('../controllers/userController');  */
 
@@ -15,7 +15,7 @@ router.get('/verify/:code', verifyMail)
 router.post('/signin', signIn)
 // router.get('/token', passport.authenticate('jwt', {session: false}), signInToken)
 router.post('/signout', signOut)
-// router.patch('/:id', update)
+router.patch('/profile/:id', update)
 // router.delete('/:id', destroy)
 
 module.exports = router;
