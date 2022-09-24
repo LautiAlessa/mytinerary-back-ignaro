@@ -5,11 +5,11 @@ const passport = require('passport');
 
 const {signUp, verifyMail, signIn, all, read, update, /* signInToken, */ signOut} = require('../controllers/userController')
 
-/* const { create, all, update, destroy} = require('../controllers/userController');  */
+const { create, all, update, destroy} = require('../controllers/userController');  
 
 // router.post('/', create)
 router.get('/', all)
-router.get('/', read)
+router.get('/profile/:id', read)
 router.post('/signup', signUp)
 router.get('/verify/:code', verifyMail)
 router.post('/signin', signIn)
@@ -24,7 +24,7 @@ module.exports = router;
 // var express = require('express');
 // var router = express.Router();
 
-// /* GET users listing. */
+// / GET users listing. */
 // router.get('/', function(req, res, next) {
 //   res.send('respond with a resource');
 // });
