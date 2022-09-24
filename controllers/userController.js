@@ -290,36 +290,36 @@ const userController = {
         }
     },
 
+    update: async (req, res) => {
+        const { id } = req.params
+        const user = req.body
+        let userModify
+        try {
+            userModify = await User.findOneAndUpdate({ _id: id }, user, { new: true })
+            if (userModify) {
+                res.status(200).json({
+                    message: "user modified",
+                    response: userModify,
+                    success: true
+                })
+            } else {
+                res.status(406).json({
+                    message: 'cant update, user values are invalid',
+                    success: false
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
+
 }
 module.exports = userController
-
-//     update: async (req, res) => {
-//         const { id } = req.params
-//         const user = req.body
-//         let userModify
-//         try {
-//             userModify = await User.findOneAndUpdate({ _id: id }, user, { new: true })
-//             if (userModify) {
-//                 res.status(200).json({
-//                     message: "user modified",
-//                     response: userModify,
-//                     success: true
-//                 })
-//             } else {
-//                 res.status(406).json({
-//                     message: 'cant update, user values are invalid',
-//                     success: false
-//                 })
-//             }
-
-//         } catch (error) {
-//             console.log(error);
-//             res.status(400).json({
-//                 message: "error",
-//                 success: false
-//             })
-//         }
-//     },
 
 //     destroy: async (req, res) => {
 //         const { id } = req.params
