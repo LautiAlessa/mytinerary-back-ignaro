@@ -5,8 +5,6 @@ const passport = require('passport');
 
 const {signUp, verifyMail, all, signIn, read, update, /* signInToken, */ signOut} = require('../controllers/userController')
 
-// const { create, all, update, destroy} = require('../controllers/userController');  
-
 // router.post('/', create)
 router.get('/', all)
 router.get('/profile/:id', read)
