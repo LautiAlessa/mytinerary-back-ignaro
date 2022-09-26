@@ -1,10 +1,14 @@
 var express = require('express');
+const passport = require('passport');
 var router = express.Router();
+require('../config/passport')
 
-const { create, all, destroy } = require('../controllers/commentController'); 
+const { create, all, destroy, read, update } = require('../controllers/commentController'); 
 
-router.post('/', create)
+router.post('/', passport.authenticate('jwt', {session: false}), create)
 router.get('/', all)
-router.delete('/:id', destroy)
+router.get('/:id', read)
+router.patch('/:id', passport.authenticate('jwt', {session: false}), update)
+router.delete('/:id', passport.authenticate('jwt', {session: false}), destroy)
 
 module.exports = router;

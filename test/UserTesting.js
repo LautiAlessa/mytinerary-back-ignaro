@@ -81,7 +81,7 @@ describe('POST /auth/signin', function () {
             })
     })
 
-    it('Must respond with 400 status code, couldn´t sign up', function () {
+    it('Must respond with 400 status code, couldnÂ´t sign up', function () {
         request(app)
             .post('/auth/signup')
             .send({})
@@ -115,4 +115,36 @@ it('Must respond with 409 status code, user already exists', function (done) {
         })
 })
 
+}); */
+
+// ---------------- Profile Testing
+
+/* describe('PATCH /auth/profile', function () {
+    it('Must respond with 200 status code', function (done) {
+        request(app)
+            .patch('/auth/profile/632e6afd5a93b5c7325dd4ba')
+            .send({
+                // name: "Ignacio",
+                name: "Nacho",
+                // photo: "https://pbs.twimg.com/media/B-eVjUPCYAAtO6M.png",
+                photo: "https://play-lh.googleusercontent.com/TBRwjS_qfJCSj1m7zZB93FnpJM5fSpMA_wUlFDLxWAb45T9RmwBvQd5cWR5viJJOhkI",
+                
+                // lastName: "Giusti",
+                // country: "Argentina",
+            })
+            .expect(200, done)
+    })
+}) */
+
+/* describe('GET /auth/profile', function () {
+    it('Must get a users info and a 200 status code', function (done) {
+        request(app)
+            .get('/auth/profile/632e6afd5a93b5c7325dd4ba')
+            .expect(200)
+            .then(response => {
+                assert(response.body)
+                console.log(response.body)
+                done()
+            })
+    })
 }); */

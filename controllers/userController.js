@@ -29,6 +29,7 @@ const crypto = require('crypto')
 const bcryptjs = require('bcryptjs')
 const sendMail = require('./sendMail')
 const { find, findOne } = require('../models/User')
+const jwt = require('jsonwebtoken')
 
 const userController = {
 
@@ -40,8 +41,8 @@ const userController = {
             photo,
             email,
             password,
-            role, 
-            from, 
+            role,
+            from,
         } = req.body
         try {
             let user = await User.findOne({ email })
@@ -146,12 +147,16 @@ const userController = {
                             from: user.from,
                             photo: user.photo
                         }
+                        const token = jwt.sign({ id: user._id, role: user.role }, process.env.KEY_JWT, { expiresIn: 60 * 60 * 24 * 7 })
                         user.logged = true
                         await user.save()
                         res.status(200).json({
                             success: true,
-                            response: { user: loginUser },
-                            message: 'Welcome' + user.name
+                            response: {
+                                user: loginUser,
+                                token: token
+                            },
+                            message: 'Welcome ' + user.name
                         })
                     } else {
                         res.status(401).json({
@@ -199,24 +204,42 @@ const userController = {
             })
         }
     },
+
+    // signInToken: (req, res) => {
+    //     if (req.user !== null) {
+    //         res.status(200).json({
+    //             success: true,
+    //             response: {
+    //                 user: req.user
+    //             },
+    //             message: 'Welcome ' + req.user.name + '!'
+    //         })
+    //     } else {
+    //         res.json({
+    //             success: false,
+    //             message: "sign in please!"
+    //         })
+    //     }
+    // },
+
     signOut: async (req, res) => {
-        const {email} = req.body
+        const { email } = req.body
         try {
-            let user = await User.findOne({email:email})
-                if (user){
-                    user.logged = false
-                    await user.save()
-                    res.status(200).json({
-                        success: true,
-                        response: user.logged,
-                        message: 'Signed Out!'
-                    })
-                } else {
-                    res.status(404).json({
-                        success: false,
-                        message: 'User not found'
-                    })
-                }
+            let user = await User.findOne({ email: email })
+            if (user) {
+                user.logged = false
+                await user.save()
+                res.status(200).json({
+                    success: true,
+                    response: user.logged,
+                    message: 'Signed Out!'
+                })
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: 'User not found'
+                })
+            }
         } catch (error) {
             console.log(error);
             res.status(400).json({
@@ -267,36 +290,37 @@ const userController = {
         }
     },
 
+    update: async (req, res) => {
+        const { id } = req.params
+        const user = req.body
+        let userModify
+        try {
+            userModify = await User.findOneAndUpdate({ _id: id }, user, { new: true })
+            if (userModify) {
+                res.status(200).json({
+                    message: "user modified",
+                    response: userModify,
+                    success: true
+                })
+            } else {
+                res.status(406).json({
+                    message: 'cant update, user values are invalid',
+                    success: false
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
+
 }
 module.exports = userController
 
-//     update: async (req, res) => {
-//         const { id } = req.params
-//         const user = req.body
-//         let userModify
-//         try {
-//             userModify = await User.findOneAndUpdate({ _id: id }, user, { new: true })
-//             if (userModify) {
-//                 res.status(200).json({
-//                     message: "user modified",
-//                     response: userModify,
-//                     success: true
-//                 })
-//             } else {
-//                 res.status(406).json({
-//                     message: 'cant update, user values are invalid',
-//                     success: false
-//                 })
-//             }
-
-//         } catch (error) {
-//             console.log(error);
-//             res.status(400).json({
-//                 message: "error",
-//                 success: false
-//             })
-//         }
-//     },
 
 //     destroy: async (req, res) => {
 //         const { id } = req.params

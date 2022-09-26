@@ -55,6 +55,59 @@ const commentController = {
             res.status(500).json()
         }
     },
+    
+    read: async (req, res) => {
+        const { id } = req.params
+        try {
+            let comment = await Comment.findOne({ _id: id })
+            if (comment) {
+                res.status(200).json({
+                    message: "you got one comment",
+                    response: comment,
+                    success: true
+                })
+            } else {
+                res.status(404).json({
+                    message: "couldn't find that comment",
+                    success: false
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
+
+    update: async (req, res) => {
+        const { id } = req.params
+        const comment = req.body
+        let commentModify
+        try {
+            commentModify = await Comment.findOneAndUpdate({ _id: id }, comment, { new: true })
+            if (commentModify) {
+                res.status(200).json({
+                    message: "comment modified",
+                    response: commentModify,
+                    success: true
+                })
+            } else {
+                res.status(406).json({
+                    message: 'cant update, comment values are invalid',
+                    success: false
+                })
+            }
+
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
 
     destroy: async (req, res) => {
         const { id } = req.params

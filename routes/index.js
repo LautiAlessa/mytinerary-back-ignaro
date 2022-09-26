@@ -5,6 +5,7 @@ const itineraryRouter = require('./itineraries')
 const activityRouter = require('./activities')
 const commentRouter = require ('./comments')
 const userRouter = require('./users')
+const likesRouter = require('./likes')
 
 
 /* GET home page. */
@@ -17,5 +18,6 @@ router.use('/itineraries', itineraryRouter)
 router.use('/auth', userRouter)
 router.use('/activities', activityRouter)
 router.use('/comments', commentRouter)
+router.use('/likes', likesRouter)
 
 module.exports = router;
